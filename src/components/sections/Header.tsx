@@ -5,56 +5,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
-export default function Header() {
-  const { ethers } = require("ethers");
-  const [provider, setProvider] = useState(null);
-  const [network, setNetwork] = useState("");
-  const [contract, setContract] = useState(null);
-  const [events, setEvents] = useState([]);
-
-  const myContract = {
-    address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    abi: [
-      "event SomeEvent(address indexed _from, uint256 _value)",
-      "function someFunction() public returns (bool)",
-    ],
-  };
-
-  const accountCheck = window.ethereum
-
-  const initializeProvider = async () => {
-    if (window.ethereum) {
-      await window.ethereum.request({ method: "eth_requestAccounts" });
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      console.log(window.ethereum._state);
-      setProvider(provider);
-    }
-  };
-  useEffect(() => {
-    const getNetwork = async () => {
-      if (provider) {
-        const network = await (provider as ethers.BrowserProvider).getNetwork();
-        console.log(network);
-        setNetwork(network.name);
-      }
-    };
-
-    getNetwork();
-
-    const contract = async () => {
-      if (provider) {
-        const contract = await ethers.getContractAt(
-          myContract.abi,
-          myContract.address
-        );
-        console.log(contract);
-        setContract(contract);
-      }
-    };
-  }, [ethers.provider, contract, provider]);
-
+export default function Header(props:any) {
   const navbarText = [
     "All",
     "Art",
@@ -108,9 +59,8 @@ export default function Header() {
           />
         </div>
         <div className="flex items-center space-x-4">
-          { (accountCheck && accountCheck._state && accountCheck._state.accounts.length > 0) ? (
+          { (props.accountCheck && props.accountCheck._state && props.accountCheck._state.accounts.length > 0) ? (
             <button
-            onClick={initializeProvider}
               className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
             >
               <span className="group group-hover:text-red-600 mr-2">Welcome</span>{" "}
@@ -118,7 +68,7 @@ export default function Header() {
             </button>
           ) : (
             <button
-              onClick={initializeProvider}
+              onClick={props.initializeProvider}
               className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
             >
               <span className="group group-hover:text-red-600 mr-2">Login</span>{" "}
