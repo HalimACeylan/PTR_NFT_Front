@@ -15,7 +15,6 @@ export default function App(){
     const [network, setNetwork] = useState("");
     const [contract, setContract] = useState(null);
     const [events, setEvents] = useState([]);
-
     const accountCheck = window.ethereum;
 
     useEffect(() => {
