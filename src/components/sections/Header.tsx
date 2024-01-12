@@ -7,13 +7,11 @@ import Link from "next/link";
 import Image from "next/image";
 export default function Header(props:any) {
   const navbarText = [
-    "All",
-    "Art",
-    "Gaming",
-    "Memberships",
-    "PFPs",
-    "Photography",
-    "Music",
+    "Hepsi",
+    "Tarih",
+    "Spor",
+    "Bilim",
+    "Müzik",
   ];
   const navbar = navbarText.map((text) => (
     <button
@@ -34,19 +32,19 @@ export default function Header(props:any) {
               className="text-white font-semibold hover:text-red-600"
               href="#"
             >
-              Drops
+              Ana sayfa
             </Link>
             <Link
               className="text-white font-semibold hover:text-red-600"
               href="#"
             >
-              Stats
+              Envanter
             </Link>
             <Link
               className="text-white font-semibold hover:text-red-600"
               href="#"
             >
-              Create
+              NFT Oluştur
             </Link>
           </div>
         </div>
@@ -54,7 +52,7 @@ export default function Header(props:any) {
           <SearchIcon className="h-5 w-5 mr-3 text-white" />
           <input
             className="bg-transparent text-white w-full placeholder-white outline-none"
-            placeholder="Search"
+            placeholder="Ara"
             type="Search"
           />
         </div>
@@ -63,7 +61,7 @@ export default function Header(props:any) {
             <button
               className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
             >
-              <span className="group group-hover:text-red-600 mr-2">Welcome</span>{" "}
+              <span className="group group-hover:text-red-600 mr-2">Hoş geldin</span>{" "}
               <WalletIcon />
             </button>
           ) : (
@@ -71,7 +69,7 @@ export default function Header(props:any) {
               onClick={props.initializeProvider}
               className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
             >
-              <span className="group group-hover:text-red-600 mr-2">Login</span>{" "}
+              <span className="group group-hover:text-red-600 mr-2">Giriş Yap</span>{" "}
               <WalletIcon />
             </button>
           )}
