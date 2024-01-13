@@ -1,58 +1,69 @@
-"use client";
-import Card from '../ui/Card'
-import { useState } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
-import { ethers } from "ethers";
-import myContract from "../../contract.json";
+const Create = () => {
+  const [file, setFile] = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const JWT = `${process.env.PINATA_JWT}`
 
-export default function Create(props: any) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-//   const axios = require('axios')
-//   const FormData = require('form-data')
-//   const fs = require('fs')
-//   const JWT = 'PASTE_YOUR_PINATA_JWT'
+  function handleFileChange(e : any) {
+    console.log(e.target.files);
+    setFile(e.target.files[0]);
+  };
 
-//   const pinFileToIPFS = async () => {
-//     const formData = new FormData();
-//     const src = "path/to/file.png";
-
-//     const file = fs.createReadStream(src)
-//     formData.append('file', file)
-
-//     const pinataMetadata = JSON.stringify({
-//       name: 'File name',
-//     });
-//     formData.append('pinataMetadata', pinataMetadata);
+  const pinFileToIPFS = async () => {
+    try {
+      if (file === null) {
+        console.error("File is null");
+        return;
+      }
   
-//     const pinataOptions = JSON.stringify({
-//       cidVersion: 0,
-//     })
-//     formData.append('pinataOptions', pinataOptions);
+      const formData = new FormData();
+      formData.append('file', file);
   
-//     try{
-//       const res = await axios.post("https://api.pinata.cloud/pinning/pinFileToIPFS", formData, {
-//         maxBodyLength: "Infinity",
-//         headers: {
-//           'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
-//           'Authorization': `Bearer ${JWT}`
-//         }
-//       });
-//       console.log(res.data);
-//     } catch (error) {
-//       console.log(error);
-//     }
-// }
+      const pinataMetadata = {
+        name: name,
+        keyvalues: {
+          'Description': description,
+          'Price': price,
+        },
+      };
+  
+      formData.append('pinataMetadata', JSON.stringify(pinataMetadata));
+      formData.append('pinataOptions', JSON.stringify({ cidVersion: 0 }));
+  
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${JWT}`,
+        },
+      };
+  
+      const res = await axios.post(
+        'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        formData,
+        config
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  
 
-
-//   const uploadToIPFS = () => {
-//     pinFileToIPFS()
-//   }
-
-  const createNFT = () => {
-
-  }
+  const createNFT = async (e : any) => {
+    console.log('Create NFT is pressed');
+    e.preventDefault();
+    try {
+      await pinFileToIPFS();
+      console.log('NFT created successfully');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
@@ -66,47 +77,45 @@ export default function Create(props: any) {
                 type="file"
                 required
                 name="file"
-                // onChange={uploadToIPFS}
+                onChange={handleFileChange}
               />
             </label>
             <label>
               Name:
               <input
-                // onChange={(e) => setName(e.target.value)}
-                 // size="500px"
-                required
                 type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Name"
               />
             </label>
             <label>
               Description:
               <textarea
-                // onChange={(e) => setDescription(e.target.value)}
-                 // size="500px"
-                required
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="Description"
               ></textarea>
             </label>
             <label>
-              Price in ETH:
+              Price in PTR:
               <input
-                // onChange={(e) => setPrice(e.target.value)}
-                 // size="500px"
-                required
                 type="number"
-                placeholder="Price in ETH"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Price in PTR"
               />
             </label>
-            <div className="d-grid px-0">
-              <button onClick={createNFT} className="btn-primary"> 
+            <div className="d-grid px-0 bg-black">
+              <button onClick={createNFT} className="btn-primary">
                 Create & List NFT!
               </button>
             </div>
           </form>
         </div>
-        {/* <Card src="https://picsum.photos/1920/1080" alt="image" name="NFT 9" price="0.01 ETH" width="120" height="120" /> */}
       </div>
     </div>
   );
-}
+};
+
+export default Create;
