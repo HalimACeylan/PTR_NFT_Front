@@ -7,7 +7,7 @@ const Create = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const JWT = `${process.env.PINATA_JWT}`
+  const JWT = `${process.env.NEXT_PUBLIC_PINATA_API_KEY}` || 'test';
   const pinFileToIPFS = async () => {
     try {
       if (files.length < 0) {
@@ -16,6 +16,8 @@ const Create = () => {
       }
   
       const formData = new FormData();
+      console.log(files[0])
+      console.log(JWT)
       formData.append('file', files[0]);
   
       const pinataMetadata = {

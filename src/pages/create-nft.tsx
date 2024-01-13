@@ -6,16 +6,18 @@ import Footer from '@/components/sections/Footer';
 import { ethers } from "ethers";
 import myContract from "@/contract.json";
 import '@/app/globals.css'
-import Previews from '@/components/ui/Previews';
 export default function NFTCreate(){
 
     const { ethers } = require("ethers");
     const [provider, setProvider] = useState(null);
     const [network, setNetwork] = useState("");
     const [contract, setContract] = useState(null);
+    const [accountCheck, setAccountCheck] = useState(false);
 
 
     useEffect(() => {
+      setAccountCheck((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
+
         const contract = async () => {
           if (provider) {
             const signer = await (provider as ethers.BrowserProvider ).getSigner();
@@ -35,22 +37,23 @@ export default function NFTCreate(){
         };
     
         getNetwork();
-      }, [ethers.provider, contract, network, provider, ethers.BrowserProvider, ethers.Contract, myContract.address]);
+      }, [contract, network, provider,accountCheck]);
 
       const initializeProvider = async () => {
         if ((window as any).ethereum) {
           await (window as any).ethereum.request({ method: "eth_requestAccounts" });
           const provider = new ethers.BrowserProvider((window as any).ethereum);
+          setProvider(provider);
+          setAccountCheck((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
           const accounts = await provider.send("eth_requestAccounts", []);
           const balance = await provider.getBalance(accounts[0]);
           const block = await provider.getBlockNumber();
-          setProvider(provider);
         }
       };
 
     return(
         <div className='bg-gray-800'>
-            <Header initializeProvider={initializeProvider} />
+            <Header initializeProvider={initializeProvider} accountCheck={accountCheck} />
             <Create />
             <Footer />
         </div>

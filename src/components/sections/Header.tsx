@@ -6,15 +6,9 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Header(props:any) {
 
-  const navbarText = [
-    "Hepsi",
-    "Tarih",
-    "Spor",
-    "Bilim",
-    "Müzik",
-  ];
+export default function Header(props: any) {
+  const navbarText = ["Hepsi", "Tarih", "Spor", "Bilim", "Müzik"];
   const navbar = navbarText.map((text) => (
     <button
       key={text}
@@ -34,7 +28,7 @@ export default function Header(props:any) {
               className="text-white font-semibold hover:text-red-600"
               href="/"
             >
-              Ana sayfa
+              Anasayfa
             </Link>
             <Link
               className="text-white font-semibold hover:text-red-600"
@@ -59,14 +53,28 @@ export default function Header(props:any) {
           />
         </div>
         <div className="flex items-center space-x-4">
+          {props.accountCheck ? (
             <button
               onClick={props.initializeProvider}
               className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
             >
-              <span className="group group-hover:text-red-600 mr-2">Giriş Yap</span>{" "}
+              <span className="group group-hover:text-red-600 mr-2">
+                Welcome
+              </span>{" "}
               <WalletIcon />
             </button>
-          
+          ) : (
+            <button
+              onClick={props.initializeProvider}
+              className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
+            >
+              <span className="group group-hover:text-red-600 mr-2">
+                Giriş Yap
+              </span>{" "}
+              <WalletIcon />
+            </button>
+          )}
+
           <button className="border border-gray-500 rounded-lg p-3">
             {" "}
             <BellIcon className="h-6 w-6 text-white" />
@@ -165,7 +173,7 @@ function ShoppingCartIcon(props: any) {
 function Logo(props: any) {
   return (
     <div {...props}>
-      <Image width="120" height="120" src="/assets/logo.png" alt="logo" />
+      <Image width="140" height="140" src="/assets/logo.png" alt="logo" />
     </div>
   );
 }
