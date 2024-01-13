@@ -6,6 +6,7 @@ import Footer from '@/components/sections/Footer';
 import { ethers } from "ethers";
 import myContract from "@/contract.json";
 import '@/app/globals.css'
+import Previews from '@/components/ui/Previews';
 export default function NFTCreate(){
 
     const { ethers } = require("ethers");
