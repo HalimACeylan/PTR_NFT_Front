@@ -5,7 +5,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+
 export default function Header(props:any) {
+
   const navbarText = [
     "Hepsi",
     "Tarih",
@@ -30,7 +32,7 @@ export default function Header(props:any) {
           <div className="flex border-l pl-4 space-x-4">
             <Link
               className="text-white font-semibold hover:text-red-600"
-              href="#"
+              href="/"
             >
               Ana sayfa
             </Link>
@@ -42,7 +44,7 @@ export default function Header(props:any) {
             </Link>
             <Link
               className="text-white font-semibold hover:text-red-600"
-              href="/create"
+              href="/create-nft"
             >
               NFT Oluştur
             </Link>
@@ -57,14 +59,6 @@ export default function Header(props:any) {
           />
         </div>
         <div className="flex items-center space-x-4">
-          { (props.accountCheck && props.accountCheck._state && props.accountCheck._state.accounts.length > 0) ? (
-            <button
-              className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
-            >
-              <span className="group group-hover:text-red-600 mr-2">Hoş geldin</span>{" "}
-              <WalletIcon />
-            </button>
-          ) : (
             <button
               onClick={props.initializeProvider}
               className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
@@ -72,7 +66,7 @@ export default function Header(props:any) {
               <span className="group group-hover:text-red-600 mr-2">Giriş Yap</span>{" "}
               <WalletIcon />
             </button>
-          )}
+          
           <button className="border border-gray-500 rounded-lg p-3">
             {" "}
             <BellIcon className="h-6 w-6 text-white" />
