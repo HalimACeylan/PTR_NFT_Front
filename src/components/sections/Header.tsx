@@ -42,7 +42,7 @@ export default function Header(props:any) {
             </Link>
             <Link
               className="text-white font-semibold hover:text-red-600"
-              href="#"
+              href="/create"
             >
               NFT Oluştur
             </Link>

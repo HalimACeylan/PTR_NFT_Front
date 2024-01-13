@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/sections/Header';
 import Hero from '@/components/sections/Hero';
+import Create from '@/components/sections/Create';
 import Footer from '@/components/sections/Footer';
 import Link from "next/link";
 import Image from "next/image";
@@ -56,6 +57,7 @@ export default function App(){
         <div className='bg-gray-800'>
             <Header initializeProvider={initializeProvider} accountCheck={accountCheck} />
             <Hero provider={provider} contract={contract} />
+            <Create />
             <Footer />
         </div>
     )

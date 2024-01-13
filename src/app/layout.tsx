@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['greek'] })
 
 export const metadata: Metadata = {
-  title: 'Parla Türkiyem NFT',
+  title: 'ParlaTR NFT',
   description: 'Türkiye \' nin 100 yıllık yadigarların NFT teknolojisi ile koruyoruz.',
 }
 
