@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Previews from '../ui/Previews';
 import { ethers } from "ethers";
-import NFT from "../../contractsData/NFT.json";
-import NFTAddress from "../../contractsData/NFT-address.json";
+import NFTAbi from "../../contractsData/NFT.json";
+import NFTAddress from '../../contractsData/NFT-address.json'
+import MarketplaceAbi from '../../contractsData/Marketplace.json'
+import MarketplaceAddress from '../../contractsData/Marketplace-address.json'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Contract } from 'ethers';
 
-
-const Create = (props:any) => {
+const Create = () => {
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -55,10 +56,10 @@ const Create = (props:any) => {
       }else{
         if(res.data?.isDuplicate){
           toast('Bu NFT zaten var');
-          createNFT(res.data.IpfsHash,price)
+          frontCreateNFT(res.data.IpfsHash,price)
       }else{
         toast('NFT başarıyla oluşturuldu');
-        createNFT(res.data.IpfsHash,price);
+        frontCreateNFT(res.data.IpfsHash,price);
       }
     }
     } catch (error) {
@@ -66,18 +67,47 @@ const Create = (props:any) => {
     }
   };
   
-  const createNFT = async (tokenURI:any,price:any) => {
-    console.log(props)
-    if(props.provider){
-      console.log(tokenURI);
-      const signer = await (props.provider as ethers.BrowserProvider).getSigner();
+  // TODO: Add few checks, such as failing to upload IPFS, user should be warned
+  const frontCreateNFT = async (tokenURI:any,price:any) => {
+    const provider = new ethers.BrowserProvider(window.ethereum)
+    if(provider){
+      const signer = await provider.getSigner();
       const NFTcontract  = await new ethers.Contract(
-        NFTAddress.address,NFT.abi,signer
+        NFTAddress.address,NFTAbi.abi,signer
       );
       const tx = await NFTcontract.createNFT(tokenURI);
+      await tx.wait();
       if(tx.data){
-        props.contract.makeItem(NFTAddress.address,tx.data,price);
+        const marketPlace  = await new ethers.Contract(
+          MarketplaceAddress.address,MarketplaceAbi.abi,signer
+        );
+
+        const txMarket = await NFTcontract.setApprovalForAll(marketPlace, true);
+        await txMarket.wait();
+        
+        await (await marketPlace.makeItem(NFTAddress.address, NFTcontract.tokenCount(), price)).wait()
       }
+    }
+  };
+
+  const testChain = async (e : any) => {
+    console.log('TestChain pressed');
+    e.preventDefault();
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const NFTcontract  = await new ethers.Contract(
+        NFTAddress.address,NFTAbi.abi,signer
+      );
+      const marketPlace  = await new ethers.Contract(
+        MarketplaceAddress.address,MarketplaceAbi.abi,signer
+      );
+      console.log('Printed pressed.');
+      await NFTcontract.printExistingNFTIDs();
+      await marketPlace.printAllItemsAndMetadata();
+      console.log("Check hardhat if it is printed.");
+    } catch (error) {
+      console.error(error);
     }
   };
   
@@ -125,6 +155,9 @@ const Create = (props:any) => {
               />
               <button onClick={request} className=' m-2 rounded-xl shadow-lg box-border p-4 text-white border-gray-600 bg-gray-700'>
                 Create & List NFT!
+              </button>
+              <button onClick={testChain} className=' m-2 rounded-xl shadow-lg box-border p-4 text-white border-gray-600 bg-gray-700'>
+                Test Chain
               </button>
           </form>
         </div>
