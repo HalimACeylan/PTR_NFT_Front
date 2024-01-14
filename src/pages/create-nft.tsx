@@ -17,6 +17,12 @@ export default function NFTCreate(){
     const [accountCheck, setAccountCheck] = useState(false);
     const [events, setEvents] = useState([]);
 
+    if(typeof window !== "undefined"){
+      window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
+        console.log(accounts)
+        setAccountCheck(accounts.length > 0);
+      })
+    }
 
 
     const initializeProvider = async () => {

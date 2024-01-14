@@ -1,65 +1,55 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import Header from '@/components/sections/Header';
-import Hero from '@/components/sections/Hero';
-import { ethers } from "ethers";
-import myContract from "@/contract.json";
+import React, { useEffect, useState } from "react";
+import Header from "@/components/sections/Header";
+import Hero from "@/components/sections/Hero";
+import MarketPlace from "../contractsData/Marketplace.json";
+import MarketPlaceAddress from "../contractsData/Marketplace-address.json";
+import NFTAbi from "../contractsData/NFT.json";
+import NFTAddress from "../contractsData/NFT-address.json";
 
-
-export default function Index(){
+export default function Index() {
+  const { ethers } = require("ethers");
+  const [loading, setLoading] = useState(true);
   
+  const provider = new ethers.BrowserProvider(window.ethereum)
+  const [Marketplace, setMarketplace] = useState(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi,provider))
+  const [NFT, setNFT] = useState(new ethers.Contract(NFTAddress.address, NFTAbi.abi, provider))
+  const [accountCheck, setAccountCheck] = useState((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
 
-    const { ethers } = require("ethers");
-    const [provider, setProvider] = useState(null);
-    const [network, setNetwork] = useState("");
-    const [contract, setContract] = useState(null);
-    const [events, setEvents] = useState([]);
-    const [accountCheck, setAccountCheck] = useState(false);
+  window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
+    console.log(accounts)
+    setAccountCheck(accounts.length > 0);
+  })
 
-    useEffect(() => {
-      setAccountCheck((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
+  const initializeProvider = async () => {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    // Get provider from Metamask
+    // Set signer
+    const signer = await provider.getSigner()
 
-         const contract = async () => {
-           if (provider) {
-             const signer = await (provider as ethers.BrowserProvider ).getSigner();
-             const contract  = await new ethers.Contract(
-                myContract.address,myContract.abi,signer
-             );
-             setContract(contract);
-           }
-         }
-           contract();
-         const getNetwork = async () => {
-           if (provider) {
-             const network = await (provider as ethers.BrowserProvider ).getNetwork();
-             console.log(network);
-             setNetwork(network.name);
-           }
-         };
-     
-         getNetwork();
-        }, [contract, network,accountCheck]);
+    window.ethereum.on('chainChanged', (chainId:any) => {
+      window.location.reload();
+    })
 
+    loadContracts(signer)
+  }
+  const loadContracts = async (signer:any) => {
+    // Get deployed copies of contracts
+    setNFT(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
+    setLoading(false)
+  }
 
-       const initializeProvider = async () => {
-        if ((window as any).ethereum) {
-          await (window as any).ethereum.request({ method: "eth_requestAccounts" });
-          const provider = new ethers.BrowserProvider((window as any).ethereum);
-          setProvider(provider);
-          setAccountCheck((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
-          const accounts = await provider.send("eth_requestAccounts", []);
-          const balance = await provider.getBalance(accounts[0]);
-          const block = await provider.getBlockNumber();
-
-
-        }
-      };
-     
-    
-    return(
-        <div className='bg-gray-800'>
-            <Header initializeProvider={initializeProvider} accountCheck={accountCheck} />
-            <Hero provider={provider} contract={contract} />
-        </div>
-    )
+  
+  return (
+    <div className="bg-gray-800">
+      <Header
+        initializeProvider={initializeProvider}
+        accountCheck={accountCheck}
+      />
+      <Hero
+        MarketPlaceContract={Marketplace}
+        NFTContract={NFT}
+      />
+    </div>
+  );
 }

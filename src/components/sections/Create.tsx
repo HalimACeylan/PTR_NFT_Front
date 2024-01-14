@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Contract } from 'ethers';
 
-const Create = () => {
+const Create = (marketPlaceConract:any,nftConract:any) => {
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -71,21 +71,14 @@ const Create = () => {
   const frontCreateNFT = async (tokenURI:any,price:any) => {
     const provider = new ethers.BrowserProvider(window.ethereum)
     if(provider){
-      const signer = await provider.getSigner();
-      const NFTcontract  = await new ethers.Contract(
-        NFTAddress.address,NFTAbi.abi,signer
-      );
-      const tx = await NFTcontract.createNFT(tokenURI);
+      const tx = await nftConract.createNFT(tokenURI);
       await tx.wait();
       if(tx.data){
-        const marketPlace  = await new ethers.Contract(
-          MarketplaceAddress.address,MarketplaceAbi.abi,signer
-        );
 
-        const txMarket = await NFTcontract.setApprovalForAll(marketPlace, true);
+        const txMarket = await nftConract.setApprovalForAll(marketPlaceConract, true);
         await txMarket.wait();
         
-        await (await marketPlace.makeItem(NFTAddress.address, NFTcontract.tokenCount(), price)).wait()
+        await (await marketPlaceConract.makeItem(NFTAddress.address, nftConract.tokenCount(), price)).wait()
       }
     }
   };
@@ -94,17 +87,9 @@ const Create = () => {
     console.log('TestChain pressed');
     e.preventDefault();
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const NFTcontract  = await new ethers.Contract(
-        NFTAddress.address,NFTAbi.abi,signer
-      );
-      const marketPlace  = await new ethers.Contract(
-        MarketplaceAddress.address,MarketplaceAbi.abi,signer
-      );
       console.log('Printed pressed.');
-      await NFTcontract.printExistingNFTIDs();
-      await marketPlace.printAllItemsAndMetadata();
+      await nftConract.printExistingNFTIDs();
+      await marketPlaceConract.printAllItemsAndMetadata();
       console.log("Check hardhat if it is printed.");
     } catch (error) {
       console.error(error);
