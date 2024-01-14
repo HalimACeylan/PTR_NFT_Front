@@ -18,6 +18,12 @@ export default function Index() {
 
   window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
     console.log(accounts)
+    if(accounts.length > 0){
+      const signer = await provider.getSigner()
+      loadContracts(signer)
+      console.log(Marketplace);
+      console.log(NFT);
+    }
     setAccountCheck(accounts.length > 0);
   })
 
@@ -26,7 +32,6 @@ export default function Index() {
     // Get provider from Metamask
     // Set signer
     const signer = await provider.getSigner()
-
     window.ethereum.on('chainChanged', (chainId:any) => {
       window.location.reload();
     })
@@ -35,6 +40,8 @@ export default function Index() {
   }
   const loadContracts = async (signer:any) => {
     // Get deployed copies of contracts
+
+    setMarketplace(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
     setNFT(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
     setLoading(false)
   }

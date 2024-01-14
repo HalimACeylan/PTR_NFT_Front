@@ -1,7 +1,6 @@
 import Image from 'next/image'
 
 export default function Card(props:any) {
-    console.log(props)
 
 return (
     <button onClick={props.onClick} className="flex flex-col border  text-lg w-full h-full rounded-xl shadow-xl transition ease-in-out delay-50 hover:-translate-y-3 group hover:bg-red-600 text-white ">

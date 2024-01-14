@@ -23,7 +23,6 @@ export default function NFTCreate(){
 
     if(typeof window !== "undefined"){
       window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
-        console.log(accounts)
         setAccountCheck(accounts.length > 0);
       })
     }

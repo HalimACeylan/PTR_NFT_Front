@@ -19,21 +19,26 @@ export default function Hero(props:any){
         console.log(item)
         const uri = await props.NFTContract.tokenURI(item.tokenId)
         const totalPrice = await props.MarketPlaceContract.getTotalPrice(item.itemId)
-        itemsList.push({
-          itemId: item.itemId,
-          tokenId: item.tokenId,
-          uri: uri,
-          price: totalPrice.toString(),
-        })
+        if(!item.sold){
+          itemsList.push({
+            itemId: item.itemId,
+            tokenId: item.tokenId,
+            uri: uri,
+            price: totalPrice.toString(),
+          })
+        }
       } 
       const Purchase = (item:any) => {
        async function buy(){
-          await props.MarketPlaceContract.purchaseItem(item.itemId);
+          console.log(props.MarketPlaceContract)
+          const tx = await props.MarketPlaceContract.purchaseItem(item.itemId , {value: item.price});
+          await tx.wait();
+          console.log(tx)
         }
         return buy;
       }
      const Cards = itemsList.map((item:any) => {
-      return <Card key={item.itemId} onClick={Purchase(item.itemId)} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.tokenId.toString} price={item.price.toString()} width="300" height="300"/>
+      return <Card key={item.itemId} onClick={Purchase(item)} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.tokenId.toString} price={item.price.toString()} width="300" height="300"/>
     }); 
     return Cards;
     }
