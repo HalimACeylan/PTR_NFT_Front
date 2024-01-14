@@ -5,6 +5,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function Header(props: any) {
   return (
@@ -59,8 +60,8 @@ export default function Header(props: any) {
           )}
 
           {props.accountCheck ? (
-                        <button
-                        onClick={props.initializeProvider}
+                        <Link
+                        href="/inventory"
                         className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row items-center"
                       >
                         <span className="group group-hover:text-red-600 mr-1 text-lg">
@@ -68,7 +69,8 @@ export default function Header(props: any) {
                         </span>
                         {" "}
                         <Inventory />
-                      </button>
+
+                      </Link>
           ) : (
             <button
               className="bg-red-600  hover:bg-gray-300 text-white px-4 py-2.5 rounded-lg flex flex-row items-center disabled:bg-gray-400"
