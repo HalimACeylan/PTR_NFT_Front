@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Contract } from 'ethers';
 
-const Create = (marketPlaceConract:any,nftConract:any) => {
+const Create = (props:any) => {
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -70,15 +70,17 @@ const Create = (marketPlaceConract:any,nftConract:any) => {
   // TODO: Add few checks, such as failing to upload IPFS, user should be warned
   const frontCreateNFT = async (tokenURI:any,price:any) => {
     const provider = new ethers.BrowserProvider(window.ethereum)
+    console.log(props.nftContract);
     if(provider){
-      const tx = await nftConract.createNFT(tokenURI);
+      console.log(props.nftContract);
+      const tx = await props.nftContract.createNFT(tokenURI);
       await tx.wait();
       if(tx.data){
 
-        const txMarket = await nftConract.setApprovalForAll(marketPlaceConract, true);
+        const txMarket = await props.nftContract.setApprovalForAll(props.marketPlaceConract, true);
         await txMarket.wait();
         
-        await (await marketPlaceConract.makeItem(NFTAddress.address, nftConract.tokenCount(), price)).wait()
+        await (await props.marketPlaceConract.makeItem(NFTAddress.address, props.nftContract.tokenCount(), price)).wait()
       }
     }
   };
@@ -88,8 +90,8 @@ const Create = (marketPlaceConract:any,nftConract:any) => {
     e.preventDefault();
     try {
       console.log('Printed pressed.');
-      await nftConract.printExistingNFTIDs();
-      await marketPlaceConract.printAllItemsAndMetadata();
+      await props.nftContract.printExistingNFTIDs();
+      await props.marketPlaceConract.printAllItemsAndMetadata();
       console.log("Check hardhat if it is printed.");
     } catch (error) {
       console.error(error);

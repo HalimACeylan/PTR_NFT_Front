@@ -7,13 +7,17 @@ import Warn from '@/components/sections/SignInWarn';
 import { ethers } from "ethers";
 import MarketPlace from "../contractsData/Marketplace.json";
 import MarketPlaceAddress from "../contractsData/Marketplace-address.json";
+import NFTAbi from "../contractsData/NFT.json";
+import NFTAddress from "../contractsData/NFT-address.json";
 import '@/app/globals.css'
 export default function NFTCreate(){
 
     const { ethers } = require("ethers");
     const [providerState, setProvider] = useState();
     const [network, setNetwork] = useState("");
-    const [contract, setContract] = useState(null);
+    const [marketplaceContract, setMarketPlaceContract] = useState(null);
+    const [nftContract, setNftContract] = useState(null);
+
     const [accountCheck, setAccountCheck] = useState(false);
     const [events, setEvents] = useState([]);
 
@@ -43,11 +47,16 @@ export default function NFTCreate(){
         const defineContract = async () => {
           if (providerState) {
             const signer = await (providerState as ethers.BrowserProvider).getSigner();
-            const contract  = await new ethers.Contract(
+            const marketPlace  = await new ethers.Contract(
               MarketPlaceAddress.address,MarketPlace.abi,signer
             );
-            console.log(contract);
-            setContract(contract);
+            const nftContract  = await new ethers.Contract(
+              NFTAddress.address,NFTAbi.abi,signer
+            );
+            setMarketPlaceContract(marketPlace);
+            setNftContract(nftContract);
+            console.log(marketPlace);
+            console.log(nftContract);
           }
         }
         const getNetwork = async () => {
@@ -73,7 +82,7 @@ export default function NFTCreate(){
         <div className='bg-gray-800'>
           {accountCheck ? (<div>
             <Header initializeProvider={initializeProvider} accountCheck={accountCheck} />
-            <Create provider={providerState} contract={contract}/>
+            <Create  marketPlaceConract={marketplaceContract} nftContract={nftContract} />
             <Footer />
             </div>) : (<div>
               <Header initializeProvider={initializeProvider} accountCheck={accountCheck} />
