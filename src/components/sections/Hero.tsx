@@ -38,7 +38,7 @@ export default function Hero(props:any){
         return buy;
       }
      const Cards = itemsList.map((item:any) => {
-      return <Card key={item.itemId} onClick={Purchase(item)} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.tokenId.toString} price={item.price.toString()} width="300" height="300"/>
+      return <Card key={item.itemId} isInventory={false} onClick={Purchase(item)} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.tokenId.toString} price={item.price.toString()} width="300" height="300"/>
     }); 
     return Cards;
     }

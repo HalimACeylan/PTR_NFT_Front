@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function Card(props: any) {
   return (
@@ -7,28 +7,32 @@ export default function Card(props: any) {
         <Image
           width={props.width}
           height={props.height}
-          className='w-full rounded-xl min-h-80 max-h-80'
+          className="w-full rounded-xl min-h-80 max-h-80"
           src={props.src}
           alt={props.alt}
         />
-        <div className='flex flex-wrap justify-between p-2 w-full text-center'>
-          <span className='flex flex-col w-1/2'> 
-            <span className='text-red-600 group'>
-              Name
-            </span> 
+        <div className="flex flex-wrap justify-between p-2 w-full text-center">
+          <span className="flex flex-col w-1/2">
+            <span className="text-red-600 group">Name</span>
             {props.name}
           </span>
-          <span className='flex flex-col w-1/2'> 
-            <span className='text-red-600 group'>
-              Price
-            </span> 
+          <span className="flex flex-col w-1/2">
+            <span className="text-red-600 group">Price</span>
             {props.price}
           </span>
         </div>
       </div>
-      <button onClick={props.onClick} className="bg-blue-500 text-white py-2 rounded-b-xl hover:bg-red-600">
-        Envanter'e Ekle
-      </button>
+      {props.isInventory ? (
+        <div></div>
+      ) : (
+        <button
+          onClick={props.onClick}
+          className="bg-red-600 text-white py-2  rounded-b-xl group-hover:bg-white group-hover:text-red-600"
+        >
+          Envanter'e Ekle
+        </button>
+      )}
+
     </div>
   );
 }

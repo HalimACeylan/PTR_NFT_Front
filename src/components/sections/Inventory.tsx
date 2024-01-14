@@ -25,7 +25,7 @@ export default function Inventory(props:any){
         }
       } 
      const Cards = itemsList.map((item:any) => {
-      return <Card key={item.itemId} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.tokenId.toString} price={item.price.toString()} width="300" height="300"/>
+      return <Card key={item.itemId} isInventory={true} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.tokenId.toString} price={item.price.toString()} width="300" height="300"/>
     }); 
     return Cards;
     }
