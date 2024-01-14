@@ -2,14 +2,22 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
-    const bottomLinks = [
+    const bottomLinkTitles = [
         "Hakkında",
         "NFT Oluştur",
         "SSS",
         "Biz Kimiz?",
-    ] 
-    const bottom = bottomLinks.map((text) => (
-        <Link href="/" key={text} className="border-b w-3/4 p-2 ml-auto hover:bg-red-600 rounded-xl">
+    ]
+
+    const bottomRoutes = [
+        "/about",
+        "/create-nft",
+        "/sss",
+        "/whoweare"
+    ]
+
+    const bottom = bottomLinkTitles.map((text, index) => (
+        <Link href={bottomRoutes[index]} key={text} className="border-b w-3/4 p-2 ml-auto hover:bg-red-600 rounded-xl">
             {text}
         </Link>
     ))

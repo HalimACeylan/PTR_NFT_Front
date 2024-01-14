@@ -42,7 +42,7 @@ export default function Header(props: any) {
               className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row items-center"
             >
               <span className="group group-hover:text-red-600 mr-2 text-lg">
-                Welcome
+                Hoşgeldiniz
               </span>{" "}
               <WalletIcon />
             </button>
