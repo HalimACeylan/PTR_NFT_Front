@@ -23,6 +23,16 @@ export default function NFTCreate(){
 
     if(typeof window !== "undefined"){
       window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
+        window.location.reload();
+        console.log(accounts)
+        if(accounts.length > 0){
+          const provider = new ethers.BrowserProvider(window.ethereum)
+          const signer = await provider.getSigner()
+          setMarketPlaceContract(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
+          setNftContract(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
+          console.log(marketplaceContract);
+          console.log(nftContract);
+        }
         setAccountCheck(accounts.length > 0);
       })
     }
@@ -42,6 +52,9 @@ export default function NFTCreate(){
 
 
     useEffect(() => {
+      if (window.ethereum) {
+        initializeProvider()
+      }
   
         const defineContract = async () => {
           if (providerState) {

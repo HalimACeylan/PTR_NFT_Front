@@ -17,6 +17,7 @@ export default function Index() {
   const [accountCheck, setAccountCheck] = useState((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
 
   window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
+    window.location.reload();
     console.log(accounts)
     if(accounts.length > 0){
       const signer = await provider.getSigner()

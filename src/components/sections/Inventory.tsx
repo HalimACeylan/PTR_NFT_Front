@@ -16,6 +16,8 @@ export default function Inventory(props:any){
         const totalPrice = await props.MarketPlaceContract.getTotalPrice(item.itemId)
 
         if((props.account as string).toLowerCase() === item.seller.toLowerCase()){
+          console.log(item.seller)
+          console.log(props.account)
           itemsList.push({
             itemId: item.itemId,
             tokenId: item.tokenId,

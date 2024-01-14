@@ -10,8 +10,12 @@ import MarketplaceAddress from '../../contractsData/Marketplace-address.json'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Contract } from 'ethers';
+import { useRouter } from 'next/router';
 
 const Create = (props:any) => {
+
+  const route = useRouter();
+
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -55,10 +59,9 @@ const Create = (props:any) => {
         toast('NFT oluşturulamadı');
       }else{
         if(res.data?.isDuplicate){
-          toast('Bu NFT zaten var');
+          toast('Bu NFT zaten IPFS üzerinde mevcut Yeniden oluşturuluyor');
           frontCreateNFT(res.data.IpfsHash,price)
       }else{
-        toast('NFT başarıyla oluşturuldu');
         frontCreateNFT(res.data.IpfsHash,price);
       }
     }
@@ -72,16 +75,34 @@ const Create = (props:any) => {
     const provider = new ethers.BrowserProvider(window.ethereum)
     console.log(props.nftContract);
     if(provider){
-      console.log(props.nftContract);
-      const tx = await props.nftContract.createNFT(tokenURI);
-      await tx.wait();
-      if(tx.data){
-
-        const txMarket = await props.nftContract.setApprovalForAll(props.marketPlaceConract, true);
-        await txMarket.wait();
-        
-        await (await props.marketPlaceConract.makeItem(NFTAddress.address, props.nftContract.tokenCount(), price)).wait()
+      try{
+        const tx = await props.nftContract.createNFT(tokenURI);
+        await tx.wait();
+        if(tx.data){
+          try{
+            const txMarket = await props.nftContract.setApprovalForAll(props.marketPlaceConract, true);
+            await txMarket.wait();
+          }catch(error){
+            console.error(error);
+            toast('NFT oluştuşturulurken bir hata oluştu');
+          }
+  
+          try{
+            await (await props.marketPlaceConract.makeItem(NFTAddress.address, props.nftContract.tokenCount(), price)).wait();
+            toast('NFT başarıyla oluşturuldu');
+            route.push('/');
+  
+          }catch(error){
+            console.error(error);
+            toast('NFT oluştuşturulken bir hata oluştu');
+  
+          } 
+        }
+      }catch(error){
+        console.error(error);
+        toast('NFT oluştuşturulurken bir hata oluştu');
       }
+          
     }
   };
 
@@ -106,7 +127,7 @@ const Create = (props:any) => {
       await pinFileToIPFS();
       console.log('NFT created successfully');
     } catch (error) {
-      console.error(error);
+      toast('NFT oluştuşturulken bir hata oluştu');
     }
   };
 
@@ -149,7 +170,18 @@ const Create = (props:any) => {
           </form>
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer  
+      position="top-left"
+      autoClose={1000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+       />
     </div>
   );
 };
