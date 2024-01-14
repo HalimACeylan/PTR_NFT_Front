@@ -15,8 +15,19 @@ export default function Hero(props:any){
         }
       };
 
+      const navbarText = ["Hepsi", "Tarih", "Spor", "Bilim", "Müzik"];
+      const navbar = navbarText.map((text) => (
+        <button
+          key={text}
+          className="text-white hover:bg-red-600 px-4 rounded-xl py-2.5 text-xl"
+        >
+          {text}
+        </button>
+      ));
+
     return (
     <div>
+            <div className="flex py-2 overflow-x-auto mx-12">{navbar}</div>
         <div className="grid grid-cols-5 gap-6 w-full bg-gray-800 px-16 py-8" >
         <Card onClick={buy} src="https://picsum.photos/1920/1080" alt="image" name="NFT 1" price="0.01 ETH" width="120" height="120"/>
         <Card onClick={buy} src="https://picsum.photos/1920/1080" alt="image" name="NFT 2" price="0.01 ETH" width="120" height="120"/>

@@ -6,18 +6,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-
 export default function Header(props: any) {
-  const navbarText = ["Hepsi", "Tarih", "Spor", "Bilim", "Müzik"];
-  const navbar = navbarText.map((text) => (
-    <button
-      key={text}
-      className="text-white hover:bg-red-600 px-4 rounded-xl py-2.5 text-xl"
-    >
-      {text}
-    </button>
-  ));
-
   return (
     <div className="bg-gray-800">
       <nav className="flex items-center justify-between mx-16 py-2">
@@ -29,12 +18,6 @@ export default function Header(props: any) {
               href="/"
             >
               Anasayfa
-            </Link>
-            <Link
-              className="text-white font-semibold hover:text-red-600"
-              href="#"
-            >
-              Envanter
             </Link>
             <Link
               className="text-white font-semibold hover:text-red-600"
@@ -56,9 +39,9 @@ export default function Header(props: any) {
           {props.accountCheck ? (
             <button
               onClick={props.initializeProvider}
-              className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
+              className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row items-center"
             >
-              <span className="group group-hover:text-red-600 mr-2">
+              <span className="group group-hover:text-red-600 mr-2 text-lg">
                 Welcome
               </span>{" "}
               <WalletIcon />
@@ -66,46 +49,57 @@ export default function Header(props: any) {
           ) : (
             <button
               onClick={props.initializeProvider}
-              className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row"
+              className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row items-center"
             >
-              <span className="group group-hover:text-red-600 mr-2">
+              <span className="group group-hover:text-red-600 mr-2 text-lg">
                 Giriş Yap
               </span>{" "}
               <WalletIcon />
             </button>
           )}
 
-          <button className="border border-gray-500 rounded-lg p-3">
-            {" "}
-            <BellIcon className="h-6 w-6 text-white" />
-          </button>
-          <button className="border border-gray-500 rounded-lg p-3">
-            {" "}
-            <ShoppingCartIcon className="h-6 w-6 text-white" />
-          </button>
+          {props.accountCheck ? (
+                        <button
+                        onClick={props.initializeProvider}
+                        className="bg-red-600 group hover:bg-gray-300 text-white px-4 py-3 rounded-lg flex flex-row items-center"
+                      >
+                        <span className="group group-hover:text-red-600 mr-1 text-lg">
+                          Envanter
+                        </span>
+                        {" "}
+                        <Inventory />
+                      </button>
+          ) : (
+            <button
+              className="bg-red-600  hover:bg-gray-300 text-white px-4 py-2.5 rounded-lg flex flex-row items-center disabled:bg-gray-400"
+              disabled
+            >
+
+              <span className=" mr-0.5 text-lg">
+                Envanter
+              </span>
+              <Inventory />
+            </button>
+          )}
         </div>
       </nav>
-      <div className="flex py-2 overflow-x-auto mx-12">{navbar}</div>
     </div>
   );
 }
 
-function BellIcon(props: any) {
+function Inventory(props: any) {
   return (
     <svg
-      {...props}
+    {...props}
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
+      width="30"
+      height="30"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
     >
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+      <path
+        fill="currentColor"
+        d="M7.615 21q-.69 0-1.152-.462Q6 20.075 6 19.385V12q0-1.933 1.084-3.425q1.083-1.492 2.762-2.144V6q0-.904.625-1.529T12 3.846q.904 0 1.529.625T14.154 6v.43q1.679.653 2.762 2.145Q18 10.067 18 12v7.385q0 .69-.462 1.152q-.463.463-1.153.463zM15 15.5q.213 0 .357-.143q.143-.144.143-.357v-2.5h-7v1h6V15q0 .213.143.357q.144.143.357.143m-4.154-9.362q.294-.069.577-.103Q11.706 6 12 6t.577.035q.283.034.577.103V6q0-.483-.336-.818q-.335-.336-.818-.336t-.818.336q-.336.335-.336.818z"
+      />
     </svg>
   );
 }

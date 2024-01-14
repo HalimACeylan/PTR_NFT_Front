@@ -14,7 +14,7 @@ export default function Footer() {
         </Link>
     ))
   return (
-    <div className="bg-gray-800 border-t pt-6">
+    <div className="bg-gray-800 border-t text-white">
       <div className="flex flex-row px-16 justify-between">
         <div className="flex flex-row items-center w-1/2">
           <Logo />
@@ -31,7 +31,7 @@ export default function Footer() {
         </div>
        </div>
       </div>
-      <div className="bg-gray-700 py-4 text-center bottom-0 mt-8">
+      <div className="bg-gray-700 py-4 text-center bottom-0 mt-3">
         <p>2024 - Muğla Sıtkı Koçman University - All Rights Reserved</p>
       </div>
     </div>
@@ -41,7 +41,7 @@ export default function Footer() {
 function Logo(props: any) {
   return (
     <div {...props}>
-      <Image width="300" height="300" src="/assets/logo.png" alt="logo" />
+      <Image width="240" height="240" src="/assets/logo.png" alt="logo" />
     </div>
   );
 }
