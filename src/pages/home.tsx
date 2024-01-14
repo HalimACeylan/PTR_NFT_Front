@@ -27,6 +27,12 @@ export default function Index() {
     setAccountCheck(accounts.length > 0);
   })
 
+  useEffect(() => {
+    if (window.ethereum) {
+      initializeProvider()
+    }
+  }, [])
+
   const initializeProvider = async () => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     // Get provider from Metamask
