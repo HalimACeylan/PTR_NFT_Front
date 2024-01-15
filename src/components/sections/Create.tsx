@@ -54,7 +54,6 @@ const Create = (props:any) => {
         formData,
         config
       );
-      console.log(res);
       if(res.status !== 200 ){
         toast('NFT oluşturulamadı');
       }else{
@@ -73,7 +72,6 @@ const Create = (props:any) => {
   // TODO: Add few checks, such as failing to upload IPFS, user should be warned
   const frontCreateNFT = async (tokenURI:any,price:any) => {
     const provider = new ethers.BrowserProvider(window.ethereum)
-    console.log(props.nftContract);
     if(provider){
       try{
         const tx = await props.nftContract.createNFT(tokenURI);

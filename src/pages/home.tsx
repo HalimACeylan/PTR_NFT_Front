@@ -11,25 +11,29 @@ export default function Index() {
   const { ethers } = require("ethers");
   const [loading, setLoading] = useState(true);
   
-  const provider = new ethers.BrowserProvider(window.ethereum)
+  let provider;
+  if(typeof window !== "undefined"){
+    provider = new ethers.BrowserProvider(window.ethereum)
+  }
   const [Marketplace, setMarketplace] = useState(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi,provider))
   const [NFT, setNFT] = useState(new ethers.Contract(NFTAddress.address, NFTAbi.abi, provider))
   const [accountCheck, setAccountCheck] = useState((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
   const [account , setAccount] = useState((window as any).ethereum._state?.accounts[0]);
 
+
+
   window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
     if(accounts.length > 0){
       const provider = new ethers.BrowserProvider(window.ethereum)
       const signer = await provider.getSigner()
+      console.log(signer)
       setMarketplace(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
       setNFT(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
+      const accounts = await provider.send("eth_requestAccounts", []);
       setAccount(accounts[0]);
-      console.log(account);
-      console.log(Marketplace);
-      console.log(NFT);
+      window.location.reload();
     }
     setAccountCheck(accounts.length > 0);
-    window.location.reload();
   })
 
   useEffect(() => {

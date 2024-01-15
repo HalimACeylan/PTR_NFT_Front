@@ -4,26 +4,32 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import MarketPlace from "../../contractsData/Marketplace.json";
 import MarketPlaceAddress from "../../contractsData/Marketplace-address.json";
+import NFTabi from "../../contractsData/NFT.json";
+import NFTAddress from "../../contractsData/NFT-address.json";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Hero(props: any) {
   const [Cards, setCards] = useState();
+  const [MarketPlaceContract, setMarketPlaceContract] = useState(props.MarketPlaceContract);
+  const [NFTContract, setNFTContract] = useState(props.NFTContract);
 
   useEffect(() => {
     const items = async () => {
-      console.log(props);
-      const itemCount = await props.MarketPlaceContract.itemCount();
-      console.log(itemCount);
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      const signer = await provider.getSigner()
+      setMarketPlaceContract(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
+      setNFTContract(new ethers.Contract(NFTAddress.address, NFTabi.abi, signer))
+      const itemCount = await MarketPlaceContract.itemCount();
       const itemsList = [];
       for (let i = 1; i <= itemCount; i++) {
-        const item = await props.MarketPlaceContract.items(i);
-        console.log(item);
-        const uri = await props.NFTContract.tokenURI(item.tokenId);
-        const totalPrice = await props.MarketPlaceContract.getTotalPrice(
+        const item = await MarketPlaceContract.items(i);
+        const uri = await NFTContract.tokenURI(item.tokenId);
+        const totalPrice = await MarketPlaceContract.getTotalPrice(
           item.itemId
         );
+        console.log(item)
         if (!item.sold) {
           itemsList.push({
             itemId: item.itemId,
@@ -41,14 +47,17 @@ export default function Hero(props: any) {
             toast("Kendi NFT'nizi satın alamazsınız");
             return;
           } else {
-            const tx = await props.MarketPlaceContract.purchaseItem(
+            console.log(MarketPlaceContract)
+            const tx = await MarketPlaceContract.purchaseItem(
               item.itemId,
               { value: item.price }
             );
-            await tx.wait();
-            toast("NFT satın alındı");
-            window.location.reload();
             console.log(tx);
+            await tx.wait().catch((error:any) => {
+              console.error("Transaction failed:", error);
+              toast("NFT satın alma işlemi başarısız oldu");
+            });
+
           }
         }
         return buy;
@@ -61,7 +70,7 @@ export default function Hero(props: any) {
             onClick={Purchase(item)}
             src={"https://ipfs.io/ipfs/" + item.uri}
             alt="image"
-            name={item.tokenId.toString}
+            name={item.tokenId.toString()}
             price={item.price.toString()}
             width="300"
             height="300"
@@ -73,7 +82,7 @@ export default function Hero(props: any) {
     items().then((res: any) => {
       setCards(res);
     });
-  }, [props]);
+  }, [props.account,props.MarketPlaceContract,props.NFTContract]);
 
   const navbarText = ["Hepsi", "Tarih", "Spor", "Bilim", "Müzik"];
   const navbar = navbarText.map((text: any) => (
