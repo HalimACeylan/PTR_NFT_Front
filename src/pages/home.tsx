@@ -18,17 +18,18 @@ export default function Index() {
   const [account , setAccount] = useState((window as any).ethereum._state?.accounts[0]);
 
   window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
-    window.location.reload();
-    console.log(accounts)
     if(accounts.length > 0){
       const provider = new ethers.BrowserProvider(window.ethereum)
       const signer = await provider.getSigner()
       setMarketplace(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
       setNFT(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
+      setAccount(accounts[0]);
+      console.log(account);
       console.log(Marketplace);
       console.log(NFT);
     }
     setAccountCheck(accounts.length > 0);
+    window.location.reload();
   })
 
   useEffect(() => {
