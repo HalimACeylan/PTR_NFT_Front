@@ -5,18 +5,23 @@ import Create from '@/components/sections/Create';
 import Footer from '@/components/sections/Footer';
 import Warn from '@/components/sections/SignInWarn';
 import { ethers } from "ethers";
-import MarketPlace from "../contractsData/Marketplace.json";
+import MarketPlaceAbi from "../contractsData/Marketplace.json";
 import MarketPlaceAddress from "../contractsData/Marketplace-address.json";
 import NFTAbi from "../contractsData/NFT.json";
 import NFTAddress from "../contractsData/NFT-address.json";
+import TestAbi from "../contractsData/Test.json";
+import TestAddress from "../contractsData/Test-address.json";
 import '@/app/globals.css'
 export default function NFTCreate(){
+
+  
 
     const { ethers } = require("ethers");
     const [providerState, setProvider] = useState();
     const [network, setNetwork] = useState("");
     const [marketplaceContract, setMarketPlaceContract] = useState(null);
     const [nftContract, setNftContract] = useState(null);
+    const [testContract, setTestContract] = useState(null);
 
     const [accountCheck, setAccountCheck] = useState(false);
     const [events, setEvents] = useState([]);
@@ -29,9 +34,8 @@ export default function NFTCreate(){
           const provider = new ethers.BrowserProvider(window.ethereum)
           const signer = await provider.getSigner()
           setNftContract(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
-          setMarketPlaceContract(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
-          console.log(marketplaceContract);
-          console.log(nftContract);
+          setMarketPlaceContract(new ethers.Contract(MarketPlaceAddress.address, MarketPlaceAbi.abi, signer))
+          setTestContract(new ethers.Contract(TestAddress.address, TestAbi.abi, signer))
         }
         setAccountCheck(accounts.length > 0);
       })
@@ -60,15 +64,17 @@ export default function NFTCreate(){
           if (providerState) {
             const signer = await (providerState as ethers.BrowserProvider).getSigner();
             const marketPlace  = await new ethers.Contract(
-              MarketPlaceAddress.address,MarketPlace.abi,signer
+              MarketPlaceAddress.address,MarketPlaceAbi.abi,signer
             );
             const nftContract  = await new ethers.Contract(
               NFTAddress.address,NFTAbi.abi,signer
             );
+            const testContract  = await new ethers.Contract(
+              TestAddress.address,TestAbi.abi,signer
+            );
             setMarketPlaceContract(marketPlace);
             setNftContract(nftContract);
-            console.log(marketPlace);
-            console.log(nftContract);
+            setTestContract(testContract);
           }
         }
         const getNetwork = async () => {
@@ -94,7 +100,11 @@ export default function NFTCreate(){
         <div className='bg-gray-800'>
           {accountCheck ? (<div>
             <Header initializeProvider={initializeProvider} accountCheck={accountCheck} />
-            <Create  marketPlaceConract={marketplaceContract} nftContract={nftContract} />
+            <Create 
+            marketPlaceConract={marketplaceContract} 
+            nftContract={nftContract} 
+            testContract={testContract}
+            />
             <Footer />
             </div>) : (<div>
               <Header initializeProvider={initializeProvider} accountCheck={accountCheck} />
