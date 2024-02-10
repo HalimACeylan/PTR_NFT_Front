@@ -120,7 +120,7 @@ export default function Previews(props: any) {
       ) : (
         <div {...getRootProps({ style })}>
           <input {...getInputProps()} />
-          <p>Drag & drop some files here, or click to select files</p>
+          <p>Bazı dosyaları buraya sürükleyip bırakın veya dosyaları seçmek için tıklayın.</p>
         </div>
       )}
     </section>

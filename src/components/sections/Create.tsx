@@ -133,7 +133,7 @@ const Create = (props:any) => {
     <div>
       <div className="flex flex-col w-8/12 bg-gray-800  mx-auto">
         <div className="container mx-auto my-10">
-          <h1 className="text-3xl font-bold mb-5 text-white text-center">Create an NFT</h1>
+          <h1 className="text-3xl font-bold mb-5 text-white text-center">NFT Oluştur</h1>
           <form className='flex flex-col items-center'>
             <div className='w-full h-max-92 max-h-max m-6'>
             <Previews files={files} setFiles={setFiles} />
@@ -143,13 +143,13 @@ const Create = (props:any) => {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
+                placeholder="İsim"
               />
               <textarea
                 value={description}
                 className='w-full h-40 m-2 rounded-xl shadow-lg box-border p-2 text-white border-gray-600 bg-gray-700'
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Description"
+                placeholder="Açıklama"
               ></textarea>
 
               <input
@@ -160,7 +160,7 @@ const Create = (props:any) => {
                 placeholder="Price in PTR"
               />
               <button onClick={request} className=' m-2 rounded-xl shadow-lg box-border p-4 text-white border-gray-600 bg-gray-700'>
-                Create & List NFT!
+                NFT Oluştur ve Listele!
               </button>
               <button onClick={testChain} className=' m-2 rounded-xl shadow-lg box-border p-4 text-white border-gray-600 bg-gray-700'>
                 Test Chain

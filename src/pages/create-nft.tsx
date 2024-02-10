@@ -28,8 +28,8 @@ export default function NFTCreate(){
         if(accounts.length > 0){
           const provider = new ethers.BrowserProvider(window.ethereum)
           const signer = await provider.getSigner()
-          setMarketPlaceContract(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
           setNftContract(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
+          setMarketPlaceContract(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
           console.log(marketplaceContract);
           console.log(nftContract);
         }
