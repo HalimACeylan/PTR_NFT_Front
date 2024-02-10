@@ -11,15 +11,15 @@ export default function Card(props: any) {
           src={props.src}
           alt={props.alt}
         />
-        <div className="flex flex-wrap justify-between p-2 w-full text-center">
-          <span className="flex flex-col w-1/2">
+        <div className="container flex-wrap justify-between p-2 w-full">
+          {/* <span className="flex flex-col w-1/2">
             <span className="text-red-600 group">Name</span>
             {props.name}
-          </span>
-          <span className="flex flex-col w-1/2">
+          </span> */}
+          {/* <span className="flex flex-col text-center">
             <span className="text-red-600 group">Price</span>
             {props.price}
-          </span>
+          </span> */}
         </div>
       </div>
       {props.isInventory ? (

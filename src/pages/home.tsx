@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/sections/Header";
 import Hero from "@/components/sections/Hero";
-import MarketPlace from "../contractsData/Marketplace.json";
+import MarketPlaceAbi from "../contractsData/Marketplace.json";
 import MarketPlaceAddress from "../contractsData/Marketplace-address.json";
 import NFTAbi from "../contractsData/NFT.json";
 import NFTAddress from "../contractsData/NFT-address.json";
+import TestAddress from "../contractsData/Test-address.json"
+import TestAbi from "../contractsData/Test.json"
+
 
 export default function Index() {
   const { ethers } = require("ethers");
@@ -15,20 +18,20 @@ export default function Index() {
   if(typeof window !== "undefined"){
     provider = new ethers.BrowserProvider(window.ethereum)
   }
-  const [Marketplace, setMarketplace] = useState(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi,provider))
+  const [Marketplace, setMarketplace] = useState(new ethers.Contract(MarketPlaceAddress.address, MarketPlaceAbi.abi,provider))
   const [NFT, setNFT] = useState(new ethers.Contract(NFTAddress.address, NFTAbi.abi, provider))
+  const [Test, setTest] = useState(new ethers.Contract(TestAddress.address, TestAbi.abi, provider))
   const [accountCheck, setAccountCheck] = useState((window as any).ethereum._state && (window as any).ethereum._state.accounts.length > 0);
   const [account , setAccount] = useState((window as any).ethereum._state?.accounts[0]);
-
-
 
   window.ethereum.on('accountsChanged', async function (accounts:Array<string>) {
     if(accounts.length > 0){
       const provider = new ethers.BrowserProvider(window.ethereum)
       const signer = await provider.getSigner()
       console.log(signer)
-      setMarketplace(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
+      setMarketplace(new ethers.Contract(MarketPlaceAddress.address, MarketPlaceAbi.abi, signer))
       setNFT(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
+      setTest(new ethers.Contract(TestAddress.address, TestAbi.abi, signer))
       const accounts = await provider.send("eth_requestAccounts", []);
       setAccount(accounts[0]);
       window.location.reload();
@@ -52,15 +55,14 @@ export default function Index() {
       const balance = await provider.getBalance(accounts[0]);
       const block = await provider.getBlockNumber();
       loadContracts(signer)
-
     }
 
   }
   const loadContracts = async (signer:any) => {
     // Get deployed copies of contracts
-
-    setMarketplace(new ethers.Contract(MarketPlaceAddress.address, MarketPlace.abi, signer))
+    setMarketplace(new ethers.Contract(MarketPlaceAddress.address, MarketPlaceAbi.abi, signer))
     setNFT(new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer))
+    setTest(new ethers.Contract(TestAddress.address, TestAbi.abi, signer))
     setLoading(false)
   }
 
@@ -74,6 +76,7 @@ export default function Index() {
       <Hero
         MarketPlaceContract={Marketplace}
         NFTContract={NFT}
+        TestContract={Test}
         account={account}
       />
     </div>

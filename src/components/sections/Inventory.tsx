@@ -12,22 +12,22 @@ export default function Inventory(props:any){
       for (let i = 1; i <= itemCount; i++) {
         const item = await props.MarketPlaceContract.items(i)
         console.log(item)
-        const uri = await props.NFTContract.tokenURI(item.tokenId)
-        const totalPrice = await props.MarketPlaceContract.getTotalPrice(item.itemId)
+        const uri = await props.NFTContract.tokenURI(item.tokenIdInNFT)
+        const totalPrice = await props.MarketPlaceContract.getTotalPrice(item.itemIdInMarketplace)
 
-        if((props.account as string).toLowerCase() === item.seller.toLowerCase()){
-          console.log(item.seller)
+        if((props.account as string).toLowerCase() === item.owner.toLowerCase()){
+          console.log(item.owner)
           console.log(props.account)
           itemsList.push({
-            itemId: item.itemId,
-            tokenId: item.tokenId,
+            inListItemId: item.itemIdInMarketplace,
+            inListTokenIdInNFT: item.tokenIdInNFT,
             uri: uri,
             price: totalPrice.toString(),
           })
         }
       } 
      const Cards = itemsList.map((item:any) => {
-      return <Card key={item.itemId} isInventory={true} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.tokenId.toString()} price={item.price.toString()} width="300" height="300"/>
+      return <Card key={item.itemIdInMarketplace} isInventory={true} src={"https://ipfs.io/ipfs/"+item.uri} alt="image" name={item.inListTokenIdInNFT.toString()} price={item.price.toString()} width="300" height="300"/>
     }); 
     return Cards;
     }

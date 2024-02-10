@@ -25,31 +25,30 @@ export default function Hero(props: any) {
       const itemsList = [];
       for (let i = 1; i <= itemCount; i++) {
         const item = await MarketPlaceContract.items(i);
-        const uri = await NFTContract.tokenURI(item.tokenId);
+        const uri = await NFTContract.tokenURI(item.tokenIdInNFT);
         const totalPrice = await MarketPlaceContract.getTotalPrice(
-          item.itemId
+          item.itemIdInMarketplace
         );
         console.log(item)
         if (!item.sold) {
           itemsList.push({
-            itemId: item.itemId,
-            tokenId: item.tokenId,
+            inListItemIdInMarketplace: item.itemIdInMarketplace,
+            inListTokenIdInNFT: item.tokenIdInNFT,
             uri: uri,
-            seller: item.seller,
+            owner: item.owner,
             price: totalPrice.toString(),
           });
         }
       }
       const Purchase = (item: any) => {
         async function buy() {
-          if (item.seller.toLowerCase() === props.account.toLowerCase()) {
-            console.log("alo");
+          if (item.owner.toLowerCase() === props.account.toLowerCase()) {
             toast("Kendi NFT'nizi satın alamazsınız");
             return;
           } else {
             console.log(MarketPlaceContract)
             const tx = await MarketPlaceContract.purchaseItem(
-              item.itemId,
+              item.inListItemIdInMarketplace,
               { value: item.price }
             );
             console.log(tx);
@@ -65,12 +64,12 @@ export default function Hero(props: any) {
       const Cards = itemsList.map((item: any) => {
         return (
           <Card
-            key={item.itemId}
+            key={item.itemIdInMarketplace}
             isInventory={false}
             onClick={Purchase(item)}
             src={"https://ipfs.io/ipfs/" + item.uri}
             alt="image"
-            name={item.tokenId.toString()}
+            name={item.inListItemIdInMarketplace.toString()}
             price={item.price.toString()}
             width="300"
             height="300"
