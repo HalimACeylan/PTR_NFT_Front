@@ -3,13 +3,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Previews from '../ui/Previews';
 import { ethers } from "ethers";
-import NFTAbi from "../../contractsData/NFT.json";
 import NFTAddress from '../../contractsData/NFT-address.json'
-import MarketplaceAbi from '../../contractsData/Marketplace.json'
-import MarketplaceAddress from '../../contractsData/Marketplace-address.json'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Contract } from 'ethers';
 import { useRouter } from 'next/router';
 
 const Create = (props:any) => {
@@ -109,8 +105,7 @@ const Create = (props:any) => {
     e.preventDefault();
     try {
       console.log('Printed pressed.');
-      await props.nftContract.printExistingNFTIDs();
-      await props.marketPlaceConract.printAllItemsAndMetadata();
+      await props.testContract.printAllItemsAndMetadata();
       console.log("Check hardhat if it is printed.");
     } catch (error) {
       console.error(error);
@@ -162,7 +157,7 @@ const Create = (props:any) => {
               <button onClick={request} className=' m-2 rounded-xl shadow-lg box-border p-4 text-white border-gray-600 bg-gray-700'>
                 NFT Oluştur ve Listele!
               </button>
-              <button onClick={testChain} className=' m-2 rounded-xl shadow-lg box-border p-4 text-white border-gray-600 bg-gray-700'>
+              <button data-id="${testChain}" onClick={testChain} className=' m-2 rounded-xl shadow-lg box-border p-4 text-white border-gray-600 bg-gray-700'>
                 Test Chain
               </button>
           </form>
